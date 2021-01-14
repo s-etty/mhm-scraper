@@ -49,7 +49,7 @@ twilight = {"name" : "Twilight",
         }
 
 
-#returns an array of lift statuses
+#extracts the lift status info and writes it to a txt file for storage
 def get_current_lift_status():
             #site URL
             url = "https://www.skihood.com/en/the-mountain/conditions"
@@ -83,7 +83,7 @@ def get_current_lift_status():
                 print("creating lifts.txt")
                 file = open("lifts.txt", "a")
                 file.close
-                
+
 # check to see if log.txt exists or not
 # if it exists, print the time, lot name, and lot status
 if Path("log.txt").is_file():
