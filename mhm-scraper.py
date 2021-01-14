@@ -49,7 +49,7 @@ twilight = {"name" : "Twilight",
         }
 
 
-#extracts the lift status info and writes it to a txt file for storage
+#extracts the blurbs from several spots on the page and stores them in a .txt file
 def get_current_blurb():
             #site URL
             url = "https://www.skihood.com/en/the-mountain/conditions"
@@ -62,19 +62,26 @@ def get_current_blurb():
             #extract the header blurb text
             header_blurb = header_container.find('h1').text
             #check if header_blurb.txt file exists
-            if Path("header-blurb.txt").is_file():
+
+            #extract the container for the snow conditions
+            snow_conditions_container = soup.find('div', class_ = 'conditions-info surface-conditions')
+            #get the text of the snow conditions
+            snow_conditions = snow_conditions_container.find('dd').text
+
+            #check if the file is there
+            if Path("blurb.txt").is_file():
                 print(f"Adding scraped data from {now}")
-                file = open("header-blurb.txt", "a")
+                file = open("blurb.txt", "a")
                 #write them to the file, separated by |
-                file.write(f"{now} | {header_blurb}\n")
+                file.write(f"{now} | {header_blurb} | {snow_conditions}\n")
                 file.close
             #if the log doesn't exist, create it.
             else:
-                print("header-blurb.txt not found")
-                print("creating header-blurb.txt")
-                file = open("header-blurb.txt", "a")
+                print("blurb.txt not found")
+                print("creating blurb.txt")
+                file = open("blurb.txt", "a")
                 #include column names
-                file.write("date_collected | blurb\n")
+                file.write("date_collected | blurb | snow_conditions\n")
                 file.close
 
 #extracts the lift status info and writes it to a txt file for storage
