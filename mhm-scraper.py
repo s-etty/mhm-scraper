@@ -51,10 +51,6 @@ twilight = {"name" : "Twilight",
 
 #returns an array of lift statuses
 def get_current_lift_status():
-            lift_names = []
-            lift_statuses = []
-            lift_schedules = []
-            lift_comments = []
             #site URL
             url = "https://www.skihood.com/en/the-mountain/conditions"
             #get the HTML
@@ -67,10 +63,11 @@ def get_current_lift_status():
             lift_table_body = lift_table.find('tbody')
             #get all the rows from the body of the table
             lifts = lift_table_body.find_all('tr')
-            #write each row to a a txt file
+            #check if lifts.txt file exists
             if Path("lifts.txt").is_file():
                 print(f"Adding scraped data from {now}")
                 file = open("lifts.txt", "a")
+                #write each row to the lifts.txt file
                 for lift in lifts:
                     #extract the lift names, statuses, schedules, and comments
                     lift_name = lift.find('td', class_ = 'status-name').text
@@ -80,13 +77,13 @@ def get_current_lift_status():
                     #write them to the file, separated by |
                     file.write(f"{now} | {lift_name} | {lift_status} | {lift_schedule} | {lift_comment}\n")
                 file.close
+            #if the log doesn't exist, create it.
             else:
                 print("lifts.txt not found")
                 print("creating lifts.txt")
                 file = open("lifts.txt", "a")
                 file.close
-
-get_current_lift_status()
+                
 # check to see if log.txt exists or not
 # if it exists, print the time, lot name, and lot status
 if Path("log.txt").is_file():
