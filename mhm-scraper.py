@@ -1,6 +1,21 @@
 # pip3 freeze > requirements.txt
 # pip3 install -r requirements.txt
 
+# mt hood location 
+# lat: 45.3435
+# long: -121.6722
+
+# all available data for MHM at 6,540
+# https://api.weather.gov/points/45.3435,-121.6722
+
+# forecast for MHM at 6,540 ft
+# https://api.weather.gov/gridpoints/PQR/142,88/forecast
+
+# hourly forecast might me more useful... probably want to pull in current temp data 
+# as well as some forecast data for maybe current, 9am, 10am, 12pm, 2pm, and 4pm? 
+# that way we have a good idea of what the day is supposed to look like? idk... 
+# https://api.weather.gov/gridpoints/PQR/142,88/forecast/hourly
+
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -10,25 +25,44 @@ from pathlib import Path
 
 now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-#site URL
-url = "https://www.skihood.com/en/the-mountain/conditions"
+# returns a dictionary of current conditions
+def get_current_weather_conditions():
+        url = 'https://api.weather.gov/gridpoints/PQR/142,88/forecast/hourly'
+        response = requests.get(url).json()
+        forecast = response['properties']['periods'][0]
+        current_conditions = { 'temperature' : forecast['temperature'], 
+                               'windspeed' : forecast['windSpeed'], 
+                               'short_forecast' : forecast['shortForecast']
+                               } 
+        return current_conditions
 
-#get the HTML
-page = requests.get(url)
-#parse the HTML with beautifulsoup
-soup = BeautifulSoup(page.content, 'html.parser')
+print(get_current_weather_conditions())
 
-#extract the parking lot table using class
-lot_table = soup.find_all('div', class_='conditions-info parking-lots')
+# returns an array of parking statuses [main, sunrise, hrm, twilight]
+def get_current_lot_conditions(): 
+        #site URL
+        url = "https://www.skihood.com/en/the-mountain/conditions"
 
-# extract parking status of each individual lot
-parking_table = lot_table[0].find_all('td', class_='status-status')
+        #get the HTML
+        page = requests.get(url)
+        #parse the HTML with beautifulsoup
+        soup = BeautifulSoup(page.content, 'html.parser')
 
-# create an array of parking statuses [main, sunrise, hrm, twilight]
-status_array = []
-for element in parking_table:
-    status = str(element.string)
-    status_array.append(status)
+        #extract the parking lot table using class
+        lot_table = soup.find_all('div', class_='conditions-info parking-lots')
+
+        # extract parking status of each individual lot
+        parking_table = lot_table[0].find_all('td', class_='status-status')
+
+        # create an array of parking statuses [main, sunrise, hrm, twilight]
+        status_array = []
+        for element in parking_table:
+                status = str(element.string)
+                status_array.append(status)
+
+        return status_array
+
+status_array = get_current_lot_conditions()
 
 # this is clunky, but whatever... it's all clunky.
 main = {"name" : "Main",
