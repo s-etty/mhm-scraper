@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 from pathlib import Path
+import pd
 
 # I think we can run this as a cron job... and it'll just automatically add to the log
 
@@ -32,24 +33,52 @@ for element in parking_table:
 
 # this is clunky, but whatever... it's all clunky.
 main = {"name" : "Main",
-        "time" : now, 
+        "time" : now,
         "status" : status_array[0]
         }
 sunrise = {"name" : "Sunrise",
-        "time" : now, 
+        "time" : now,
         "status" : status_array[1]
         }
 hrm = {"name" : "Hrm",
-        "time" : now, 
+        "time" : now,
         "status" : status_array[2]
         }
 twilight = {"name" : "Twilight",
-        "time" : now, 
+        "time" : now,
         "status" : status_array[3]
         }
 
-# check to see if log.txt exists or not 
-# if it exists, print the time, lot name, and lot status 
+
+#returns an array of lift statuses
+def get_current_lift_status():
+
+            lift_names = []
+            lift_statuses = []
+            lift_schedules = []
+            lift_comments = []
+            #site URL
+            url = "https://www.skihood.com/en/the-mountain/conditions"
+            #get the HTML
+            page = requests.get(url)
+            #parse the HTML with beautifulsoup
+            soup = BeautifulSoup(page.content, 'html.parser')
+            #extract the lift status table
+            lift_table = soup.find('div', class_ = 'conditions-info lift-operations')
+            lift_table_body = lift_table.find('tbody')
+            lifts = lift_table_body.find_all('tr')
+            for lift in lifts:
+                lift_names.append(lift.find('td', class_ = 'status-name').text)
+                lift_statuses.append(lift.find('td', class_ = 'status-status').text)
+                lift_schedule.append(lift.find('td', class_ = 'status-schedule').text)
+                lift_comments.append(lift.find('td', class_ = 'status-comments').text)
+
+get_current_lift_status()
+
+
+get_current_lift_status()
+# check to see if log.txt exists or not
+# if it exists, print the time, lot name, and lot status
 if Path("log.txt").is_file():
     print(f"Adding scraped data from {now}")
     file = open("log.txt", "a")
@@ -58,7 +87,7 @@ if Path("log.txt").is_file():
     file.write(f"{now} | {hrm['name'].ljust(8)} | {hrm['status']}\n")
     file.write(f"{now} | {twilight['name'].ljust(8)} | {twilight['status']}\n")
     file.close
-# if log.txt does not exist, create it 
+# if log.txt does not exist, create it
 else:
     print("log.txt not found")
     print("creating log.txt")
