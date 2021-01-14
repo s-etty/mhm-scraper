@@ -62,17 +62,17 @@ def get_current_blurb():
             #extract the header blurb text
             header_blurb = header_container.find('h1').text
             #check if header_blurb.txt file exists
-            if Path("header_blurb.txt").is_file():
+            if Path("header-blurb.txt").is_file():
                 print(f"Adding scraped data from {now}")
-                file = open("header_blurb.txt", "a")
+                file = open("header-blurb.txt", "a")
                 #write them to the file, separated by |
                 file.write(f"{now} | {header_blurb}\n")
                 file.close
             #if the log doesn't exist, create it.
             else:
-                print("header_blurb.txt not found")
-                print("creating header_blurb.txt")
-                file = open("header_blurb.txt", "a")
+                print("header-blurb.txt not found")
+                print("creating header-blurb.txt")
+                file = open("header-blurb.txt", "a")
                 #include column names
                 file.write("date_collected | blurb\n")
                 file.close
