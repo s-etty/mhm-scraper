@@ -86,8 +86,6 @@ def get_current_lift_status():
                 file.write("date_collected | name | status | schedule | comment\n")
                 file.close
 
-get_current_lift_status()
-
 # check to see if log.txt exists or not
 # if it exists, print the time, lot name, and lot status
 if Path("log.txt").is_file():
