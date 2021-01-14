@@ -61,8 +61,6 @@ def get_current_blurb():
             header_container = soup.find('div', class_ = 'conditions-snapshot')
             #extract the header blurb text
             header_blurb = header_container.find('h1').text
-            #check if header_blurb.txt file exists
-
             #extract the container for the snow conditions
             snow_conditions_container = soup.find('div', class_ = 'conditions-info surface-conditions')
             #get the text of the snow conditions
@@ -86,40 +84,40 @@ def get_current_blurb():
 
 #extracts the lift status info and writes it to a txt file for storage
 def get_current_lift_status():
-    #site URL
-    url = "https://www.skihood.com/en/the-mountain/conditions"
-    #get the HTML
-    page = requests.get(url)
-    #parse the HTML with beautifulsoup
-    soup = BeautifulSoup(page.content, 'html.parser')
-    #extract the lift status table
-    lift_table = soup.find('div', class_ = 'conditions-info lift-operations')
-    #get the body of the table
-    lift_table_body = lift_table.find('tbody')
-    #get all the rows from the body of the table
-    lifts = lift_table_body.find_all('tr')
-    #check if lifts.txt file exists
-    if Path("lifts.txt").is_file():
-        print(f"Adding scraped data from {now}")
-        file = open("lifts.txt", "a")
-        #write each row to the lifts.txt file
-        for lift in lifts:
-            #extract the lift names, statuses, schedules, and comments
-            lift_name = lift.find('td', class_ = 'status-name').text
-            lift_status = lift.find('td', class_ = 'status-status').text
-            lift_schedule = lift.find('td', class_ = 'status-schedule').text
-            lift_comment = lift.find('td', class_ = 'status-comments').text
-            #write them to the file, separated by |
-            file.write(f"{now} | {lift_name} | {lift_status} | {lift_schedule} | {lift_comment}\n")
-        file.close
-    #if the log doesn't exist, create it.
-    else:
-        print("lifts.txt not found")
-        print("creating lifts.txt")
-        file = open("lifts.txt", "a")
-        #include column names
-        file.write("date_collected | name | status | schedule | comment\n")
-        file.close
+            #site URL
+            url = "https://www.skihood.com/en/the-mountain/conditions"
+            #get the HTML
+            page = requests.get(url)
+            #parse the HTML with beautifulsoup
+            soup = BeautifulSoup(page.content, 'html.parser')
+            #extract the lift status table
+            lift_table = soup.find('div', class_ = 'conditions-info lift-operations')
+            #get the body of the table
+            lift_table_body = lift_table.find('tbody')
+            #get all the rows from the body of the table
+            lifts = lift_table_body.find_all('tr')
+            #check if lifts.txt file exists
+            if Path("lifts.txt").is_file():
+                print(f"Adding scraped data from {now}")
+                file = open("lifts.txt", "a")
+                #write each row to the lifts.txt file
+                for lift in lifts:
+                    #extract the lift names, statuses, schedules, and comments
+                    lift_name = lift.find('td', class_ = 'status-name').text
+                    lift_status = lift.find('td', class_ = 'status-status').text
+                    lift_schedule = lift.find('td', class_ = 'status-schedule').text
+                    lift_comment = lift.find('td', class_ = 'status-comments').text
+                    #write them to the file, separated by |
+                    file.write(f"{now} | {lift_name} | {lift_status} | {lift_schedule} | {lift_comment}\n")
+                file.close
+            #if the log doesn't exist, create it.
+            else:
+                print("lifts.txt not found")
+                print("creating lifts.txt")
+                file = open("lifts.txt", "a")
+                #include column names
+                file.write("date_collected | name | status | schedule | comment\n")
+                file.close
 
 # check to see if log.txt exists or not
 # if it exists, print the time, lot name, and lot status
