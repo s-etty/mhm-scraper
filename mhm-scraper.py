@@ -35,7 +35,6 @@ def get_current_blurb():
 
             #check if the file is there
             if Path("blurb.txt").is_file():
-                print(f"Adding scraped data from {now}")
                 file = open("blurb.txt", "a")
                 #write them to the file, separated by |
                 file.write(f"{now} | {header_blurb} | {snow_conditions}\n")
@@ -65,7 +64,6 @@ def get_current_lift_status():
             lifts = lift_table_body.find_all('tr')
             #check if lifts.txt file exists
             if Path("lifts.txt").is_file():
-                print(f"Adding scraped data from {now}")
                 file = open("lifts.txt", "a")
                 #write each row to the lifts.txt file
                 for lift in lifts:
@@ -119,7 +117,6 @@ def write_to_lot_log():
         # check to see if log.txt exists or not 
         # if it exists, print the time, lot name, and lot status 
         if Path("log.txt").is_file():
-                print(f"Adding scraped data from {now}")
                 file = open("log.txt", "a")
                 file.write(f"{now} | {'Main'.ljust(8)} | {status_array[0].ljust(7)} | {str(conditions['temperature']).ljust(3)} | {conditions['windspeed'].ljust(7)} | {conditions['short_forecast']} \n")
                 file.write(f"{now} | {'Sunrise'.ljust(8)} | {status_array[1].ljust(7)} | {str(conditions['temperature']).ljust(3)} | {conditions['windspeed'].ljust(7)} | {conditions['short_forecast']} \n")
