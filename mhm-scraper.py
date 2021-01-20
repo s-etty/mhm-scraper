@@ -136,7 +136,8 @@ def write_to_blurb_log():
             file.close
 
 write_to_lot_log()
-#schedule this to run at 7:30 AM
+
+#schedule the blurb and lift status gets to run at 7:30 AM
 scheduled_hour = 7
 scheduled_minute = 30
 #use the current datetime object to get the hour and minute
