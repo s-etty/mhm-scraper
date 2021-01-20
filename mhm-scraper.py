@@ -139,8 +139,12 @@ write_to_lot_log()
 #schedule this to run at 7:30 AM
 scheduled_hour = 7
 scheduled_minute = 30
+#use the current datetime object to get the hour and minute
 now_dt = datetime.now()
 minute = now_dt.minute
+hour = now_dt.hour
+#if the hour is 7 and the minute is 30, write to the files
+#else do nothing
 if minute == scheduled_minute and hour == scheduled_hour:
     write_to_lift_log()
     write_to_blurb_log()
