@@ -49,11 +49,19 @@ def get_current_lift_status():
 
 #extracts the current snow depths and past snowfall
 def get_current_snow_depths():
-        #get the current snow depths table
-        snow_depths_container = soup.find('div', class_ = 'conditions-snow-info')
+        #get the snow fall table
+        snow_depths_container = soup.find('div', class_ = 'conditions-glance-widget conditions-snowfall')
         #get the 12, 24, and 48 hr snowfalls
         snow_depths = snow_depths_container.findAll('dd')
-        return(snow_depths)
+        twelve = snow_depths[0].text
+        twenty_four = snow_depths[1].text
+        forty_eight = snow_depths[2].text
+
+        
+        return()
+
+temp = get_current_snow_depths()
+temp
 # returns a dictionary of current conditions
 def get_current_weather_conditions():
         url = 'https://api.weather.gov/gridpoints/PQR/142,88/forecast/hourly'
