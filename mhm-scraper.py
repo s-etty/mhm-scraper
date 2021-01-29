@@ -25,7 +25,7 @@ def get_current_blurb():
         #extract the header blurb container
         header_container = soup.find('div', class_ = 'conditions-snapshot')
         #extract the header blurb text
-        header_blurb = header_container.find('h1').text
+        header_blurb = header_container.find('h1').text.strip('\n').strip('\r')
         #return the header blurb text
         return(header_blurb)
 
