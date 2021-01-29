@@ -1,3 +1,5 @@
+#!/home/ubuntu/mhm-scraper/env/bin/python
+
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -109,10 +111,10 @@ def write_to_lot_log():
         # if it exists, print the time, lot name, and lot status
         if Path("log.txt").is_file():
                 file = open("log.txt", "a")
-                file.write(f"{now} | {'Main'.ljust(8)} | {status_array[0].ljust(7)} | {str(conditions['temperature']).ljust(3)} | {conditions['windspeed'].ljust(7)} | {conditions['short_forecast']} | {snow_stats['base_depth']} | {snow_stats['mid_depth']} | {snow_stats['twelve_hour_snow']} | {snow_stats['twenty_four_hour_snow']} | {snow_stats['forty_eight_hour_snow']}\n")
-                file.write(f"{now} | {'Sunrise'.ljust(8)} | {status_array[1].ljust(7)} | {str(conditions['temperature']).ljust(3)} | {conditions['windspeed'].ljust(7)} | {conditions['short_forecast']} | {snow_stats['base_depth']} | {snow_stats['mid_depth']} | {snow_stats['twelve_hour_snow']} | {snow_stats['twenty_four_hour_snow']} | {snow_stats['forty_eight_hour_snow']}\n")
-                file.write(f"{now} | {'HRM'.ljust(8)} | {status_array[2].ljust(7)} | {str(conditions['temperature']).ljust(3)} | {conditions['windspeed'].ljust(7)} | {conditions['short_forecast']} | {snow_stats['base_depth']} | {snow_stats['mid_depth']} | {snow_stats['twelve_hour_snow']} | {snow_stats['twenty_four_hour_snow']} | {snow_stats['forty_eight_hour_snow']}\n")
-                file.write(f"{now} | {'Twilight'.ljust(8)} | {status_array[3].ljust(7)} | {str(conditions['temperature']).ljust(3)} | {conditions['windspeed'].ljust(7)} | {conditions['short_forecast']} | {snow_stats['base_depth']} | {snow_stats['mid_depth']} | {snow_stats['twelve_hour_snow']} | {snow_stats['twenty_four_hour_snow']} | {snow_stats['forty_eight_hour_snow']}\n")
+                file.write(f"{now} | {'Main'.ljust(8)} | {status_array[0].ljust(7)}\n")
+                file.write(f"{now} | {'Sunrise'.ljust(8)} | {status_array[1].ljust(7)}\n")
+                file.write(f"{now} | {'HRM'.ljust(8)} | {status_array[2].ljust(7)}\n")
+                file.write(f"{now} | {'Twilight'.ljust(8)} | {status_array[3].ljust(7)}\n")
                 file.close
         # if log.txt does not exist, create it
         else:
@@ -168,6 +170,7 @@ write_to_lot_log()
 #schedule the blurb and lift status gets to run at 7:30 AM
 scheduled_hour = 7
 scheduled_minute = 30
+
 #use the current datetime object to get the hour and minute
 now_dt = datetime.now()
 minute = now_dt.minute
