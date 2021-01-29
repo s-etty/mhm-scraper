@@ -105,8 +105,6 @@ def get_current_lot_conditions():
 
 def write_to_lot_log():
         status_array = get_current_lot_conditions()
-        conditions = get_current_weather_conditions()
-        snow_stats = get_current_snow_depths()
         # check to see if log.txt exists or not
         # if it exists, print the time, lot name, and lot status
         if Path("log.txt").is_file():
