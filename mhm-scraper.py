@@ -90,29 +90,33 @@ def get_current_weather_conditions():
 # returns an array of parking statuses [main, sunrise, hrm, twilight]
 def get_current_lot_conditions():
         #extract the parking lot table using class
-        lot_table = soup.find_all('div', class_='conditions-info parking-lots')
-
-        # extract parking status of each individual lot
-        parking_table = lot_table[0].find_all('td', class_='status-status')
-
-        # create an array of parking statuses [main, sunrise, hrm, twilight]
-        status_array = []
+        lot_table = soup.find('div', class_='conditions-info parking-lots')
+        # Extract all the table data... which we could extract by 'data-field'
+        # attribute... but can't currently figure out a way to do that.
+        # Therefore... the ugliness below. 
+        parking_table = lot_table.find_all('td')
+        table_info = []
         for element in parking_table:
-                status = str(element.string)
-                status_array.append(status)
+                table_info.append(element.text)
+        # this is gross...but [main, sunrise, hrm, twilight]
+        status_array = [table_info[0], table_info[3], table_info[6], table_info[9]]
+        message_array = [table_info[2], table_info[5], table_info[8], table_info[11]]
 
-        return status_array
+        return {'status': status_array, 
+                'message': message_array,
+               }
 
 def write_to_lot_log():
-        status_array = get_current_lot_conditions()
+        status_array = get_current_lot_conditions()['status']
+        message_array = get_current_lot_conditions()['message']
         # check to see if log.txt exists or not
         # if it exists, print the time, lot name, and lot status
         if Path("log.txt").is_file():
                 file = open("log.txt", "a")
-                file.write(f"{now} | {'Main'.ljust(8)} | {status_array[0].ljust(7)}\n")
-                file.write(f"{now} | {'Sunrise'.ljust(8)} | {status_array[1].ljust(7)}\n")
-                file.write(f"{now} | {'HRM'.ljust(8)} | {status_array[2].ljust(7)}\n")
-                file.write(f"{now} | {'Twilight'.ljust(8)} | {status_array[3].ljust(7)}\n")
+                file.write(f"{now} | {'Main'.ljust(8)} | {status_array[0].ljust(7)} | {message_array[0]}\n")
+                file.write(f"{now} | {'Sunrise'.ljust(8)} | {status_array[1].ljust(7)} | {message_array[1]}\n")
+                file.write(f"{now} | {'HRM'.ljust(8)} | {status_array[2].ljust(7)} | {message_array[2]}\n")
+                file.write(f"{now} | {'Twilight'.ljust(8)} | {status_array[3].ljust(7)} | {message_array[3]}\n")
                 file.close
         # if log.txt does not exist, create it
         else:
@@ -176,5 +180,5 @@ hour = now_dt.hour
 #if the hour is 7 and the minute is 30, write to the files
 #else do nothing
 if minute == scheduled_minute and hour == scheduled_hour:
-    write_to_lift_log()
+#     write_to_lift_log()
     write_to_blurb_log()
